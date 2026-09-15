@@ -1,0 +1,117 @@
+---
+import Base from '../layouts/Base.astro'
+import ProductCard from '../components/ProductCard.astro'
+import SkillsDemo from '../components/SkillsDemo.astro'
+import { profile, tabs, products, articles, socials } from '../data/site.mjs'
+---
+
+<Base>
+  <section class="hero">
+    <div class="wrap">
+      <span class="eyebrow">{profile.brand}</span>
+      <h1>一个人，<span class="hl">做出一整个产品矩阵</span>。</h1>
+      <p class="lede">{profile.lede}</p>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <div class="tabs" role="tablist" aria-label="内容分类">
+      {tabs.map((t, i) => (
+        <button
+          class="tab"
+          type="button"
+          role="tab"
+          id={`tab-${t.id}`}
+          aria-controls={`panel-${t.id}`}
+          aria-selected={i === 0 ? 'true' : 'false'}
+          data-tab={t.id}
+        >
+          {t.label}
+        </button>
+      ))}
+    </div>
+
+    <!-- 产品 -->
+    <section class="panel is-active" id="panel-products" role="tabpanel" aria-labelledby="tab-products">
+      <div class="plist">
+        {products.map((p) => <ProductCard {...p} />)}
+      </div>
+    </section>
+
+    <!-- 能力 -->
+    <section class="panel" id="panel-skills" role="tabpanel" aria-labelledby="tab-skills">
+      <p class="lede" style="margin-top:0">
+        界面不只是好看，还要让人<b>知道哪里能点</b>、<b>感受到动作的分量</b>。下面三件事可以亲手试。
+      </p>
+      <div style="height:24px"></div>
+      <SkillsDemo />
+    </section>
+
+    <!-- 文章 -->
+    <section class="panel" id="panel-articles" role="tabpanel" aria-labelledby="tab-articles">
+      <div class="rows">
+        {articles.map((a) => (
+          <a class="row" href={a.href}>
+            <span class="date">{a.date}</span>
+            <span class="ttl">{a.title}</span>
+            <span class="sub">{a.sub}</span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <!-- 关于我 -->
+    <section class="panel" id="panel-about" role="tabpanel" aria-labelledby="tab-about">
+      <div class="prose">
+        <p>
+          我一个人做产品：自己提需求、自己设计、自己写、自己运营。
+          这套流程跑久了就发现，真正拖慢速度的从来不是写代码，而是<b>决策散落在各处</b>、
+          <b>知识用过一次就丢</b>。
+        </p>
+        <p>
+          所以我做了一组工作台：把重复的部分固化成工具，把判断留给自己。
+          它们都开源在 GitHub 上，也在不断改。
+        </p>
+        <p style="color:var(--t3);font-size:14px">
+          （这段是占位文案，直接在 <code>src/data/site.mjs</code> 或本文件里改。）
+        </p>
+      </div>
+    </section>
+
+    <!-- 交流 -->
+    <section class="panel" id="panel-contact" role="tabpanel" aria-labelledby="tab-contact">
+      <div class="prose">
+        <p>想聊产品、聊工具，或者只是想看看这些工作台怎么搭的，随时找我。</p>
+        <div class="socials">
+          {socials.map((s) => (
+            <a class="chip" href={s.href} target="_blank" rel="noopener">{s.label} ↗</a>
+          ))}
+          <a class="chip" href={`mailto:${profile.email}`}>{profile.email}</a>
+        </div>
+      </div>
+    </section>
+  </div>
+</Base>
+
+<script>
+  const tabEls = Array.from(document.querySelectorAll<HTMLButtonElement>('.tab'))
+  const panelEls = Array.from(document.querySelectorAll<HTMLElement>('.panel'))
+
+  const activate = (id: string) => {
+    tabEls.forEach((t) => t.setAttribute('aria-selected', String(t.dataset.tab === id)))
+    panelEls.forEach((p) => p.classList.toggle('is-active', p.id === `panel-${id}`))
+  }
+
+  tabEls.forEach((t) => {
+    t.addEventListener('click', () => {
+      const id = t.dataset.tab
+      if (!id) return
+      activate(id)
+      history.replaceState(null, '', `#${id}`)
+    })
+  })
+
+  // 支持 #products 这样的深链
+  const fromHash = location.hash.replace('#', '')
+  if (fromHash && tabEls.some((t) => t.dataset.tab === fromHash)) activate(fromHash)
+</script>

@@ -1,0 +1,45 @@
+---
+import '../styles/global.css'
+import { profile } from '../data/site.mjs'
+
+const {
+  title = `${profile.brand} — 个人项目与产品`,
+  description = profile.lede,
+} = Astro.props
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="wrap topbar-in">
+        <a class="brand" href="/">{profile.brand}<span class="reg">®</span></a>
+        <nav>
+          <a href={profile.github} target="_blank" rel="noopener">GitHub</a>
+          <a href={`mailto:${profile.email}`}>联系</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer>
+      <div class="wrap foot-in">
+        <span>© {new Date().getFullYear()} {profile.brand}</span>
+        <span>Made by one person.</span>
+      </div>
+    </footer>
+  </body>
+</html>
