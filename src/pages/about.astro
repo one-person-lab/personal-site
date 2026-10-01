@@ -1,0 +1,223 @@
+---
+import Base from '../layouts/Base.astro'
+import Icon from '../components/Icon.astro'
+import TimelineCard from '../components/TimelineCard.astro'
+import { about, profile } from '../data/site.mjs'
+const rots = ['transform -rotate-1 translate-y-2', 'transform rotate-2 translate-y-0', 'transform -rotate-1 -translate-y-2']
+---
+<Base title={`关于我 | ${profile.brand}`}>
+  <div class="max-w-6xl mx-auto px-4 py-20">
+    <div class="flex flex-col gap-12 md:gap-16">
+
+      <!-- ============ 欢迎 + ID CARD ============ -->
+      <div class="flex flex-col lg:flex-row gap-12 lg:gap-16 items-start text-left">
+        <div class="flex-1 space-y-8">
+          <h2 class="text-6xl md:text-7xl font-black text-black leading-tight">
+            <span class="font-black tracking-tight">Welcome to</span><br>
+            <span class="bg-[#3b82f6] text-white px-6 py-2 border-[4px] border-black inline-block mt-2 transform -rotate-1">{about.welcome}</span>
+          </h2>
+          {about.intro.map((p) => (
+            <p class="text-xl text-gray-700 leading-relaxed font-medium max-w-xl">{p}</p>
+          ))}
+        </div>
+
+        <!-- ID CARD -->
+        <div class="w-full lg:w-[400px] relative mt-10 lg:mt-10">
+          <div class="neo-border bg-white rounded-2xl neo-shadow-lg overflow-hidden relative transform -rotate-1">
+            <div class="neo-border border-l-0 border-r-0 border-t-0 bg-[#4ade80] px-5 py-4">
+              <div class="flex items-center justify-between gap-3">
+                <div class="font-black text-2xl text-black leading-none">ID CARD</div>
+                <div class="neo-border bg-white px-3 py-1 rounded-xl text-xs font-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">VALID</div>
+              </div>
+              <div class="mt-2 text-[11px] font-black tracking-widest uppercase text-black/80">{about.idCard.org}</div>
+            </div>
+            <div class="p-5">
+              <div class="grid grid-cols-5 gap-4 items-start">
+                <div class="col-span-2">
+                  <div class="neo-border bg-white rounded-xl overflow-hidden shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                    <div class="aspect-[3/4] w-full">
+                      <img src="/avatar.jpg" alt="头像" class="w-full h-full object-cover" />
+                    </div>
+                  </div>
+                  <div class="mt-3 flex gap-2">
+                    {about.idCard.chips.map((c) => (
+                      <span class="neo-border px-2 py-1 rounded-lg text-[10px] font-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]" style={`background-color:${c.bg};color:${c.fg}`}>{c.text}</span>
+                    ))}
+                  </div>
+                </div>
+                <div class="col-span-3 space-y-3">
+                  {about.idCard.facts.map((f) => (
+                    <div class="neo-border rounded-xl p-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]" style={`background-color:${f.bg}`}>
+                      <div class="text-[10px] font-black tracking-widest uppercase text-black/70">{f.k}</div>
+                      <div class="mt-1 text-sm font-black text-black">{f.v}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div class="mt-5 flex items-end justify-between gap-4">
+                <div class="flex-1">
+                  <div class="text-[10px] font-black tracking-widest uppercase text-black/60">ID NO.</div>
+                  <div class="mt-1 font-black text-black">{about.idCard.idNo}</div>
+                  <div class="mt-3 neo-border bg-white rounded-xl p-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                    <div class="h-10 w-full flex items-end gap-1">
+                      {[3,1,2,1,4,1,2,3,1,2,1,4,2,1,3,1,2,4,1,2,3,1,2,1].map((w) => (
+                        <div class="bg-black h-full" style={`width:${w}px`}></div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <div class="neo-border bg-[#f472b6] rounded-full w-24 h-24 flex items-center justify-center shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
+                  <div class="neo-border bg-[#4ade80] rounded-full w-16 h-16 flex items-center justify-center">
+                    <div class="text-[10px] font-black text-black text-center leading-tight">OFFICIAL<br>VIBE</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="absolute -top-8 -right-4 w-28 h-28 bg-[#f472b6] neo-border rounded-full flex flex-col items-center justify-center shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] z-10">
+            <Icon name="smile" size={24} cls="text-black mb-1" />
+            <p class="font-black text-[9px] text-center uppercase tracking-tighter leading-tight px-2">{profile.brand}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ STATEMENT 打字机 ============ -->
+      <div class="flex justify-center my-8 md:my-12">
+        <div class="relative max-w-3xl w-full">
+          <div class="absolute -top-3 -left-3 z-10 bg-white border-2 border-black px-2 py-1 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+            <span class="text-[10px] font-black uppercase tracking-wider text-black">STATEMENT</span>
+          </div>
+          <div class="relative bg-yellow-300 border-[3px] border-black px-6 py-5 md:px-12 md:py-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+            <div class="text-center">
+              <p class="font-mono text-lg md:text-2xl lg:text-3xl xl:text-4xl font-black text-black leading-relaxed min-h-[3.5rem] md:min-h-[4.5rem]">
+                <span id="tw-text"></span><span id="tw-cursor" class="inline-block w-0.5 h-5 md:h-8 lg:h-10 xl:h-12 bg-black ml-1 align-middle">|</span>
+              </p>
+            </div>
+            <div class="text-center mt-6 md:mt-7">
+              {about.statementTail.map((l, i) => i === 0 ? (
+                <p class="text-lg md:text-xl lg:text-2xl font-bold text-black leading-relaxed">{l}</p>
+              ) : (
+                <p class="text-base md:text-lg text-black/70 font-medium leading-relaxed mt-1">{l}</p>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ 近期动态 RECENT UPDATES ============ -->
+      <div class="pt-4 md:pt-6 space-y-12 relative">
+        <div class="relative flex justify-center md:justify-start">
+          <div class="absolute -top-8 -left-10 md:-left-14 hidden md:block z-50"><Icon name="arrow-left" size={28} cls="text-black" /></div>
+          <div class="absolute -top-4 left-[20%] hidden md:block z-50"><Icon name="star" size={20} cls="text-black" /></div>
+          <div class="absolute -top-4 right-[20%] hidden md:block z-50"><Icon name="zap" size={20} cls="text-[#f472b6]" /></div>
+          <div class="relative inline-block transform -rotate-2 hover:rotate-0 transition-transform cursor-pointer">
+            <div class="absolute -right-2 -bottom-2 w-full h-full border-2 border-black bg-pink-400 rounded-xl -z-10"></div>
+            <div class="relative border-2 border-black bg-pink-400 px-6 py-3 md:px-8 md:py-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+              <h2 class="text-2xl md:text-3xl font-black text-black tracking-tight">近期动态｜RECENT UPDATES</h2>
+            </div>
+          </div>
+        </div>
+        <div class="relative grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-6">
+          {about.recent.map((r, i) => (
+            <div class={'relative ' + rots[i] + ' group z-0 w-full max-w-[280px] mx-auto'}>
+              <div class="absolute -right-3 -bottom-3 w-full h-full border-2 border-black rounded-2xl -z-10 transition-transform group-hover:translate-x-1 group-hover:translate-y-1" style={'background-color:' + r.color}></div>
+              <div class="relative border-2 border-black p-6 bg-white rounded-2xl shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-transform duration-200 group-hover:translate-x-[2px] group-hover:translate-y-[2px] group-hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                <div class="flex items-center gap-3 mb-4">
+                  <div class="w-10 h-10 border-2 border-black rounded-lg flex items-center justify-center" style={'background-color:' + r.color}>
+                    <Icon name={r.icon} size={20} cls="text-black" />
+                  </div>
+                  <h3 class="font-black text-lg uppercase tracking-tight">{r.label}</h3>
+                </div>
+                <div class="flex justify-center">
+                  <p class="font-bold text-gray-800 text-lg border-b-2 pb-1" style={'border-color:' + r.color}>{r.value}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- ============ 地球Online 产线进度 ============ -->
+      <div class="text-center mt-20 -mb-4 relative z-20">
+        <h2 class="text-5xl md:text-6xl font-black mb-6">地球Online
+          <span class="bg-pink-400 px-4 neo-border inline-block transform -rotate-2 transition-all duration-300 hover:rotate-0">开放产线进度</span>
+        </h2>
+      </div>
+      <div class="relative py-16 px-4 md:px-12 bg-[#f8f8f8] neo-border rounded-[2.5rem] overflow-hidden neo-shadow-lg">
+        <div class="absolute inset-0 opacity-[0.08]" style="background-image:radial-gradient(#000 1px,transparent 1px);background-size:20px 20px"></div>
+        <div class="relative z-10 max-w-4xl mx-auto">
+          <!-- 主线任务标题 -->
+          <div class="flex justify-center md:justify-between items-center mb-2 px-4 md:px-10">
+            <div class="relative">
+              <div class="absolute -right-2 -bottom-2 w-full h-full border-black border-2 bg-[#f472b6]"></div>
+              <div class="relative border-black border-2 bg-white px-8 py-3">
+                <span class="text-3xl md:text-4xl font-black text-black tracking-tight italic">主线任务</span>
+              </div>
+            </div>
+            <div class="hidden md:flex items-center gap-2 text-xs font-black uppercase tracking-widest text-black/60">
+              <Icon name="chevron-up" size={18} cls="text-black" /> newest first
+            </div>
+          </div>
+          <div class="w-1.5 h-8 mx-auto md:ml-[calc(50%-0.75rem)] border-l-[6px] border-dashed border-black opacity-80"></div>
+
+          <!-- 时间线 -->
+          <div class="relative space-y-6">
+            {about.timeline.map((t) => (
+              <div class="flex flex-col md:flex-row items-center gap-8 md:gap-0">
+                {t.side === 'left' ? (
+                  <Fragment>
+                    <div class="flex-1 w-full order-2 md:order-1"><TimelineCard {t} align="left" /></div>
+                    <div class="md:w-20 flex justify-center z-20 order-2"><div class="w-4 h-4 bg-black rounded-full shadow-[0_0_0_6px_rgba(255,255,255,1),0_0_0_10px_rgba(0,0,0,1)]"></div></div>
+                    <div class="hidden md:block flex-1 order-3"></div>
+                  </Fragment>
+                ) : (
+                  <Fragment>
+                    <div class="hidden md:block flex-1"></div>
+                    <div class="md:w-20 flex justify-center z-20"><div class="w-4 h-4 bg-black rounded-full shadow-[0_0_0_6px_rgba(255,255,255,1),0_0_0_10px_rgba(0,0,0,1)]"></div></div>
+                    <div class="flex-1 w-full"><TimelineCard {t} align="right" /></div>
+                  </Fragment>
+                )}
+              </div>
+            ))}
+          </div>
+
+          <!-- 支线任务标题 -->
+          <div class="relative mt-10 flex justify-center md:justify-end px-4 md:pr-10">
+            <div class="relative">
+              <div class="absolute -right-2 -bottom-2 w-full h-full border-black border-2 bg-[#4ade80]"></div>
+              <div class="relative border-black border-2 bg-white px-8 py-3">
+                <span class="text-3xl md:text-4xl font-black text-black tracking-tight italic">支线任务</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // STATEMENT 打字机：100ms/字打出的句子，停 2s，50ms/字删除，循环下一句；光标 530ms 闪烁
+    const sentences: string[] = JSON.parse(document.getElementById('tw-data')!.textContent!)
+    const textEl = document.getElementById('tw-text')!
+    const cursorEl = document.getElementById('tw-cursor')!
+    setInterval(() => { cursorEl.style.opacity = cursorEl.style.opacity === '0' ? '1' : '0' }, 530)
+    let si = 0, ci = 0, deleting = false
+    function tick() {
+      const s = sentences[si]
+      if (!deleting) {
+        ci++
+        textEl.textContent = s.slice(0, ci)
+        if (ci >= s.length) { deleting = true; return setTimeout(tick, 2000) }
+        setTimeout(tick, 100)
+      } else {
+        ci--
+        textEl.textContent = s.slice(0, ci)
+        if (ci <= 0) { deleting = false; si = (si + 1) % sentences.length; return setTimeout(tick, 400) }
+        setTimeout(tick, 50)
+      }
+    }
+    tick()
+  </script>
+  <script type="application/json" id="tw-data" set:html={JSON.stringify(about.statement)} />
+</Base>

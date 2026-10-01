@@ -1,0 +1,68 @@
+---
+import Base from '../layouts/Base.astro'
+import Icon from '../components/Icon.astro'
+import { profile, articles } from '../data/site.mjs'
+---
+<Base title={`文章 — ${profile.brand}`}>
+  <div class="max-w-5xl mx-auto px-4 py-20">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12">
+      <div>
+        <h1 class="text-6xl md:text-8xl font-black mb-6 tracking-tighter">
+          The <span class="bg-green-400 px-4 neo-border inline-block transform -rotate-1">Journal</span>
+        </h1>
+        <p class="text-xl text-gray-600 font-medium max-w-xl">
+          记录一个人开产线路上的边界、方法与坑。
+        </p>
+      </div>
+    </div>
+
+    <div class="mb-12">
+      <div class="flex items-center neo-border rounded-2xl px-6 py-4 bg-white w-full neo-shadow focus-within:translate-x-1 focus-within:translate-y-1 focus-within:shadow-none transition-all">
+        <Icon name="search" size={22} cls="text-black mr-4" />
+        <input id="a-search" type="text" placeholder="搜索文章…" class="bg-transparent border-none outline-none w-full font-bold text-lg placeholder:text-gray-400" />
+      </div>
+    </div>
+
+    <div id="a-list" class="space-y-8">
+      {articles.map((a) => (
+        <a href={a.href} data-name={`${a.title} ${a.excerpt} ${a.cat}`} class="group block card-a">
+          <div class="bg-white neo-border rounded-[2rem] overflow-hidden flex flex-col sm:flex-row neo-shadow transition-all duration-300 group-hover:translate-x-1 group-hover:translate-y-1 group-hover:shadow-none">
+            <div class="w-full sm:w-48 md:w-64 lg:w-72 aspect-[4/3] sm:aspect-square md:aspect-video flex-shrink-0 border-b-2 sm:border-b-0 sm:border-r-2 border-black" style={`background-color:${a.catColor}`}>
+              <div class="w-full h-full flex items-center justify-center font-black text-black/30">封面图位</div>
+            </div>
+            <div class="flex-grow p-6 md:p-8 flex flex-col justify-center">
+              <div class="flex items-center gap-3 mb-4">
+                <span class="text-black px-2 py-0.5 neo-border text-[10px] font-black uppercase tracking-tighter" style={`background-color:${a.catColor}`}>{a.cat}</span>
+                <div class="flex items-center gap-1.5 text-gray-500">
+                  <Icon name="calendar" size={14} />
+                  <span class="text-xs font-bold tracking-tight">{a.date}</span>
+                </div>
+              </div>
+              <div class="flex justify-between items-start gap-4">
+                <h2 class="text-2xl md:text-3xl lg:text-4xl font-black group-hover:text-blue-600 transition-colors leading-tight">{a.title}</h2>
+                <div class="hidden md:flex w-14 h-14 rounded-full neo-border items-center justify-center bg-white group-hover:bg-black group-hover:text-white transition-all flex-shrink-0">
+                  <Icon name="arrow-right" size={22} cls="group-hover:translate-x-1 transition-transform" />
+                </div>
+              </div>
+              <p class="text-gray-500 text-sm md:text-base font-medium line-clamp-2 md:line-clamp-1 mt-2">{a.excerpt}</p>
+              <div class="mt-6 md:hidden flex items-center gap-2 font-black text-xs uppercase tracking-widest text-blue-600">
+                Read Article <Icon name="arrow-right" size={14} />
+              </div>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+  <script>
+    const input = document.getElementById('a-search') as HTMLInputElement
+    const cards = document.querySelectorAll('#a-list .card-a')
+    input?.addEventListener('input', () => {
+      const q = input.value.trim().toLowerCase()
+      cards.forEach((c) => {
+        const hit = !q || (c.getAttribute('data-name') ?? '').toLowerCase().includes(q)
+        ;(c as HTMLElement).style.display = hit ? '' : 'none'
+      })
+    })
+  </script>
+</Base>

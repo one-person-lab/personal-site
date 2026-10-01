@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>方向稿 v2 · 贴纸粗野</title>
+<style>
+  /* finesse · register=brand · A=gray-ink+pastel-marker-blocks · B=900 grotesk+CJK heavy
+   * C=sticker-card grid + marquee · D=CSS-only(此稿为静止帧) · E=press-sticker/paper · SOUL=7 SPECTACLE=4 DENSITY=5 */
+  :root{
+    --bg:#f0f0f0;
+    --paper:#fff;
+    --ink:#111;
+    --t2:#4b4b4b;
+    --line:#d9d9d9;
+    --o:#ffb347;   /* 主高亮：机器橙 */
+    --b:#b5deff;   /* 蓝 */
+    --y:#ffe28a;   /* 黄（现站血统） */
+    --g:#b5ffce;   /* 绿 */
+    --p:#ffb5e8;   /* 粉 */
+    --sans:'Space Grotesk','PingFang SC','Noto Sans SC',-apple-system,sans-serif;
+    --mono:ui-monospace,'SF Mono',Menlo,monospace;
+    --bw:2px;
+    --sh:3px 3px 0 var(--ink);
+  }
+  *{box-sizing:border-box;margin:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 28px}
+  a{color:inherit;text-decoration:none}
+
+  /* 胶囊导航 */
+  .navpill{position:sticky;top:14px;z-index:50;display:flex;justify-content:center;padding-top:14px}
+  .navpill .in{display:flex;align-items:center;gap:4px;background:var(--paper);border:var(--bw) solid var(--ink);
+    border-radius:999px;box-shadow:var(--sh);padding:6px 8px}
+  .navpill a{font-size:13.5px;padding:7px 16px;border-radius:999px}
+  .navpill a.on{border:var(--bw) solid var(--ink);font-weight:700;background:var(--bg)}
+  .navpill .mail{width:34px;height:34px;display:grid;place-items:center;border-radius:50%;font-size:14px}
+  .navpill .mail:hover{background:var(--y)}
+
+  /* HERO */
+  .hero{display:grid;grid-template-columns:1.25fr .75fr;gap:40px;align-items:center;padding:64px 0 72px}
+  .hero h1{font-size:60px;font-weight:900;line-height:1.12;letter-spacing:-.025em}
+  .blk{display:inline-block;padding:2px 12px;border:var(--bw) solid var(--ink);border-radius:4px;box-shadow:var(--sh)}
+  .blk.o{background:var(--o)} .blk.b{background:var(--b)}
+  .hero .meta{margin-top:22px;font-size:14.5px;color:var(--t2);line-height:1.9}
+  .hero .meta b{font-family:var(--mono);font-weight:500;color:var(--ink)}
+  .hero .fool{display:inline-block;margin-top:10px;font-family:var(--mono);font-size:13px;background:var(--y);
+    border:var(--bw) solid var(--ink);border-radius:4px;padding:2px 10px;transform:rotate(-1.2deg)}
+  .btn{display:inline-flex;align-items:center;gap:8px;margin-top:26px;background:var(--ink);color:#f5f5f5;
+    font-size:14.5px;font-weight:600;padding:12px 22px;border-radius:10px;border:var(--bw) solid var(--ink);
+    box-shadow:3px 3px 0 rgba(17,17,17,.35)}
+  .face{background:var(--paper);border:var(--bw) solid var(--ink);border-radius:18px;box-shadow:5px 5px 0 var(--ink);
+    aspect-ratio:1/1.02;display:grid;place-items:center;overflow:hidden;position:relative}
+  .face .slot{font-family:var(--mono);font-size:12px;color:var(--t3,#8a8a8a);text-align:center;line-height:1.8}
+  .face .slot b{display:block;font-size:40px}
+
+  /* 区块标题：贴纸标签 */
+  section{padding:56px 0 8px}
+  .sec-h{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:8px}
+  .sec-h h2{font-size:42px;font-weight:900;letter-spacing:-.02em}
+  .sec-h h2 .blk{font-size:38px}
+  .sec-h .more{font-size:13.5px;font-weight:600;white-space:nowrap}
+  .sec-sub{color:var(--t2);font-size:14px;margin-bottom:28px}
+
+  /* 产品贴纸卡 */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .scard{background:var(--paper);border:var(--bw) solid var(--ink);border-radius:12px;box-shadow:var(--sh);
+    padding:20px;display:flex;flex-direction:column;min-height:190px;transition:transform .18s,box-shadow .18s}
+  .scard:hover{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+  .scard .ico{width:44px;height:44px;border:var(--bw) solid var(--ink);border-radius:8px;display:grid;place-items:center;
+    font-family:var(--mono);font-size:18px;font-weight:700}
+  .scard h3{margin-top:14px;font-size:17px;font-weight:800}
+  .scard h3 span{display:block;font-family:var(--mono);font-size:11px;font-weight:400;color:var(--t2);margin-top:3px}
+  .scard p{margin-top:10px;font-size:13px;color:var(--t2);line-height:1.7}
+  .scard .go{margin-top:auto;padding-top:14px;font-family:var(--mono);font-size:12px}
+  .soon{background:var(--bg);border-style:dashed;box-shadow:none;align-items:center;justify-content:center;text-align:center;color:var(--t2)}
+  .soon b{font-size:15px} .soon span{font-family:var(--mono);font-size:11px;display:block;margin-top:6px}
+
+  /* 文章卡：封面位 */
+  .acards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .acard{background:var(--paper);border:var(--bw) solid var(--ink);border-radius:12px;box-shadow:var(--sh);overflow:hidden}
+  .acard .cover{height:130px;border-bottom:var(--bw) solid var(--ink);display:grid;place-items:center;
+    font-family:var(--mono);font-size:11.5px;color:var(--t2)}
+  .acard .body{padding:14px 16px 18px}
+  .tagchip{display:inline-block;font-size:11px;font-family:var(--mono);border:var(--bw) solid var(--ink);
+    border-radius:4px;padding:1px 8px;background:var(--g)}
+  .acard .date{font-family:var(--mono);font-size:11px;color:var(--t2);margin-left:8px}
+  .acard h3{margin-top:10px;font-size:15.5px;font-weight:800;line-height:1.5}
+  .acard p{margin-top:6px;font-size:12.5px;color:var(--t2)}
+
+  /* 跑马灯 */
+  .marq{margin-top:64px;border-top:var(--bw) solid var(--ink);border-bottom:var(--bw) solid var(--ink);
+    background:var(--paper);overflow:hidden;padding:14px 0}
+  .track{display:flex;gap:14px;width:max-content}
+  .chip{display:inline-flex;align-items:center;gap:8px;border:var(--bw) solid var(--ink);border-radius:999px;
+    padding:6px 16px;font-size:13px;font-weight:600;background:var(--y)}
+  .chip:nth-child(4n+2){background:var(--b)} .chip:nth-child(4n+3){background:var(--g)} .chip:nth-child(4n){background:var(--p)}
+  .chip i{width:8px;height:8px;border-radius:50%;background:var(--ink);font-style:normal}
+
+  /* 黑色页脚 */
+  footer{margin-top:0;background:var(--ink);color:#f2f2f2;padding:64px 0 36px}
+  .foot{display:grid;grid-template-columns:1.2fr .5fr .5fr;gap:40px}
+  .foot h3{font-size:34px;font-weight:900;letter-spacing:-.02em;line-height:1.25}
+  .foot h3 em{font-style:normal;color:var(--o)}
+  .foot .zh{margin-top:12px;font-size:13.5px;color:#a8a8a8}
+  .foot .btn{background:var(--o);color:var(--ink);border-color:var(--ink);box-shadow:3px 3px 0 #000}
+  .foot h4{font-size:13px;font-family:var(--mono);color:#8a8a8a;margin-bottom:14px}
+  .foot ul{list-style:none;padding:0;font-size:14px;line-height:2.1}
+  .foot .base{margin-top:48px;border-top:1px solid #333;padding-top:20px;display:flex;justify-content:space-between;gap:24px;
+    font-family:var(--mono);font-size:11.5px;color:#8a8a8a}
+</style>
+</head>
+<body>
+
+<div class="navpill"><div class="wrap" style="padding:0"><div class="in">
+  <a class="on" href="#">首页</a><a href="#">关于我</a><a href="#">产品</a><a href="#">文章</a><a href="#">交流</a>
+  <a class="mail" href="#">✉</a>
+</div></div></div>
+
+<main class="wrap">
+  <section class="hero">
+    <div>
+      <h1>我是<br><span class="blk o">one-person-lab</span>，<br>一个人做出<br>一整个<span class="blk b">产品矩阵</span>。</h1>
+      <div class="meta">
+        <b>Solo Builder | Tool Maker | Content Systems</b><br>
+        toB PM by day，把重复交给机器 by night。&nbsp;&nbsp;_[ ʘ̅_ʘ̅ ]_
+      </div>
+      <div class="fool">ONE MAN, ONE LINE, ALL SHIPPED !!!</div>
+      <a class="btn" href="#">认识主理人 →</a>
+    </div>
+    <div class="face"><div class="slot"><b>◉‿◉</b>头像插画位<br>（一张，需你点头后生成）</div></div>
+  </section>
+
+  <section>
+    <div class="sec-h"><h2>我造的<span class="blk o">五台机器</span></h2><a class="more">全部仓库 →</a></div>
+    <p class="sec-sub">深夜 vibe coding 的副产品们。不完美、能用、一直有意思。</p>
+    <div class="grid">
+      <a class="scard"><span class="ico" style="background:var(--b)">▤</span><h3>uni-workbench<span>通用工作台 · 总控台</span></h3><p>通用工作台 + 知识库，所有项目的总入口。</p><span class="go">查看源码 →</span></a>
+      <a class="scard"><span class="ico" style="background:var(--o)">≡</span><h3>media-hub<span>自媒体工作台</span></h3><p>选题、文案、排期、复盘收在一处，一个人的内容生产线。</p><span class="go">查看源码 →</span></a>
+      <a class="scard"><span class="ico" style="background:var(--g)">◫</span><h3>product-hub<span>产品工作台</span></h3><p>从需求池到迭代记录，每次决策留成可追溯的轨迹。</p><span class="go">查看源码 →</span></a>
+      <a class="scard"><span class="ico" style="background:var(--y)">✉</span><h3>career-hub<span>求职工作台</span></h3><p>简历、面试、投递与作品集原件统一管理。</p><span class="go">查看源码 →</span></a>
+      <a class="scard"><span class="ico" style="background:var(--p)">⚙</span><h3>build-hub<span>工程底座</span></h3><p>构建、资产与工程化公共底座，支撑上面所有工位。</p><span class="go">查看源码 →</span></a>
+      <div class="scard soon"><b>更多机器开发中…</b><span>COMING SOON</span></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-h"><h2><span class="blk b">文章</span></h2><a class="more">全部文章 →</a></div>
+    <div class="acards" style="margin-top:24px">
+      <a class="acard"><div class="cover" style="background:var(--b)">封面图位 · 拆仓库</div><div class="body"><span class="tagchip">工程</span><span class="date">2026-09</span><h3>为什么我把三个工作台拆成三个仓库</h3><p>关于边界、复用与心智负担。</p></div></a>
+      <a class="acard"><div class="cover" style="background:var(--g)">封面图位 · 知识库</div><div class="body"><span class="tagchip" style="background:var(--y)">方法</span><span class="date">2026-09</span><h3>知识库不该按 PARA 分</h3><p>加工程度与用途是两条轴。</p></div></a>
+      <a class="acard"><div class="cover" style="background:var(--p)">封面图位 · 开源</div><div class="body"><span class="tagchip" style="background:var(--o)">开源</span><span class="date">2026-08</span><h3>开源前必须过的三道门禁</h3><p>泄露校验、品牌残留、历史清洗。</p></div></a>
+    </div>
+  </section>
+
+  <div class="marq"><div class="track">
+    <span class="chip"><i></i>常读的博客</span><span class="chip"><i></i>友情链接位</span><span class="chip"><i></i>友情链接位</span><span class="chip"><i></i>友情链接位</span><span class="chip"><i></i>友情链接位</span><span class="chip"><i></i>友情链接位</span><span class="chip"><i></i>友情链接位</span><span class="chip"><i></i>常读的博客</span><span class="chip"><i></i>友情链接位</span><span class="chip"><i></i>友情链接位</span>
+  </div></div>
+</main>
+
+<footer><div class="wrap">
+  <div class="foot">
+    <div>
+      <h3>一个人，也<em>接活</em>。<br>聊聊？</h3>
+      <p class="zh">一定会成为一个很棒的大人！</p>
+      <a class="btn" href="#">发邮件 →</a>
+    </div>
+    <div><h4>EXPLORE</h4><ul><li>首页</li><li>关于我</li><li>产品</li><li>文章</li><li>交流</li></ul></div>
+    <div><h4>CONNECT</h4><ul><li>GitHub</li><li>邮箱</li><li>RED</li></ul></div>
+  </div>
+  <div class="base"><span>© 2026 one-person-lab. Made by one person.</span><span>LINE STATUS: RUNNING</span></div>
+</div></footer>
+</body>
+</html>

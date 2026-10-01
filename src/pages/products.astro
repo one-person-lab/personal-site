@@ -1,0 +1,70 @@
+---
+import Base from '../layouts/Base.astro'
+import Icon from '../components/Icon.astro'
+import { profile, products } from '../data/site.mjs'
+---
+<Base title={`产品 — ${profile.brand}`}>
+  <div class="max-w-7xl mx-auto px-6 py-20">
+    <div class="mb-16">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-6">
+        <div>
+          <h1 class="text-6xl md:text-8xl font-black mb-6 tracking-tighter">
+            Product <span class="bg-yellow-400 px-4 neo-border inline-block transform -rotate-1">Ecosystem</span>
+          </h1>
+          <p class="text-xl text-gray-600 font-medium max-w-2xl leading-relaxed">
+            传播 → 创造 → 沉淀 → 产品化 → 再传播。一个转起来的个人产品生态，而不是几个硬凑的产品。
+          </p>
+        </div>
+        <div class="w-full md:w-80">
+          <div class="flex items-center neo-border rounded-2xl px-6 py-4 bg-white w-full neo-shadow focus-within:translate-x-1 focus-within:translate-y-1 focus-within:shadow-none transition-all">
+            <Icon name="search" size={22} cls="text-black mr-4 flex-shrink-0" />
+            <input id="p-search" type="text" placeholder="搜索产品…" class="bg-transparent border-none outline-none w-full font-bold text-lg placeholder:text-gray-400" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="p-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+      {products.map((p) => (
+        <a href={p.href} target="_blank" rel="noopener" data-name={`${p.name} ${p.tag} ${p.desc}`} class="group block card-p">
+          <div class="relative neo-border rounded-[2rem] overflow-hidden neo-shadow transition-all duration-300 group-hover:translate-x-1 group-hover:translate-y-1 group-hover:shadow-none bg-white min-h-[380px]">
+            <div class="relative z-20 p-8 flex flex-col text-black h-full">
+              <div class="space-y-4 relative">
+                <div class="transition-all duration-500 ease-in-out group-hover:opacity-0 group-hover:-translate-y-4">
+                <div class="inline-flex items-center gap-2 mb-4">
+                  <div class="px-3 py-1 bg-black text-white text-[10px] font-black tracking-widest rounded-lg"># {p.id}</div>
+                  <div class="px-3 py-1 neo-border text-[10px] font-black rounded-lg" style={`background:${p.color}`}>{p.tag}</div>
+                </div>
+                  <h3 class="text-4xl font-black leading-none tracking-tighter mb-4">{p.name}</h3>
+                  <p class="text-black/80 font-bold text-base leading-relaxed border-l-4 border-black pl-4">{p.desc}</p>
+                </div>
+                <div class="absolute inset-0 opacity-0 translate-y-6 transition-all duration-500 ease-in-out group-hover:opacity-100 group-hover:translate-y-0">
+                  <p class="text-black/80 font-black text-xl leading-tight border-l-8 border-yellow-400 pl-5 mb-4">「{p.quote}」</p>
+                  <p class="text-black/60 font-bold text-sm leading-relaxed pl-7">{p.detail}</p>
+                </div>
+              </div>
+              <div class="mt-auto pt-8 flex flex-col items-center">
+                <div class="bg-white text-black px-8 py-3 rounded-xl font-black text-base neo-border flex items-center gap-2 group-hover:bg-black group-hover:text-white transition-all">
+                  View Product <Icon name="arrow-right" size={18} />
+                </div>
+                <span class="text-[9px] font-black tracking-[0.2em] text-black/30 mt-4 uppercase">{p.status}</span>
+              </div>
+            </div>
+            <div class="absolute top-0 right-0 w-32 h-32 opacity-10 pointer-events-none" style={`background:${p.color}; border-bottom-left-radius: 100%;`}></div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+  <script>
+    const input = document.getElementById('p-search') as HTMLInputElement
+    const cards = document.querySelectorAll('#p-grid .card-p')
+    input?.addEventListener('input', () => {
+      const q = input.value.trim().toLowerCase()
+      cards.forEach((c) => {
+        const hit = !q || (c.getAttribute('data-name') ?? '').toLowerCase().includes(q)
+        ;(c as HTMLElement).style.display = hit ? '' : 'none'
+      })
+    })
+  </script>
+</Base>

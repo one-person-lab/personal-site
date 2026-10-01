@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>方向稿 · 一人车间</title>
+<style>
+  /* finesse · register=brand · A=gray-paper+ink+signal-amber · B=900中文无衬线+mono数字
+   * C=工位行+产线轨道 · D=Canvas产线(此稿为静止帧) · E=machined-assembly · SOUL=7 SPECTACLE=5 DENSITY=4 */
+  :root{
+    --paper:#f1f0ec;      /* 冷灰纸，非纯白 */
+    --panel:#e9e7e2;
+    --ink:#1d1c1a;
+    --t2:#5c5a55;
+    --t3:#98958e;
+    --line:rgba(29,28,26,.12);
+    --signal:#d4551f;     /* 机器橙 */
+    --signal-dim:rgba(212,85,31,.14);
+    --steel:#c9c6c0;      /* 金属构件灰 */
+    --mono:ui-monospace,'SF Mono',Menlo,monospace;
+    --sans:'PingFang SC','Noto Sans SC',-apple-system,'Helvetica Neue',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0}
+  body{background:var(--paper);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+  /* 极淡噪点，杀“矢量感” */
+  body::before{content:'';position:fixed;inset:0;pointer-events:none;opacity:.04;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E")}
+  .wrap{max-width:1060px;margin:0 auto;padding:0 32px}
+
+  /* 顶栏 */
+  header{border-bottom:1px solid var(--line)}
+  .bar{display:flex;justify-content:space-between;align-items:center;height:52px}
+  .logo{font-family:var(--mono);font-size:12.5px;letter-spacing:.04em}
+  .logo b{color:var(--signal);font-weight:600}
+  .status{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;color:var(--t2)}
+  .lamp{width:7px;height:7px;border-radius:50%;background:var(--signal);box-shadow:0 0 0 3px var(--signal-dim)}
+
+  /* 首屏：标题压在产线图上 */
+  .hero{padding:56px 0 0}
+  .hero .kick{font-family:var(--mono);font-size:11.5px;color:var(--t3);letter-spacing:.1em}
+  .hero h1{font-size:58px;font-weight:850;line-height:1.08;letter-spacing:-.01em;margin:14px 0 10px;max-width:14em}
+  .hero h1 em{font-style:normal;color:var(--signal)}
+  .hero p{color:var(--t2);font-size:15.5px;max-width:520px}
+
+  /* 产线 */
+  .line{margin:44px 0 8px;position:relative}
+  .rail{position:absolute;left:0;right:0;top:47px;height:0;border-top:2px solid var(--steel)}
+  .rail::after{content:'';position:absolute;left:0;right:0;top:3px;border-top:1px dashed rgba(29,28,26,.18)}
+  .stations{display:grid;grid-template-columns:repeat(5,1fr);position:relative}
+  .st{display:flex;flex-direction:column;align-items:center;gap:10px}
+  .st .box{width:56px;height:56px;border:1.5px solid var(--ink);background:var(--paper);
+    display:grid;place-items:center;font-family:var(--mono);font-size:15px;font-weight:600;
+    box-shadow:4px 4px 0 var(--steel)}
+  .st.on .box{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .st .pkg{width:14px;height:10px;background:var(--signal);opacity:.9}
+  .st small{font-family:var(--mono);font-size:10.5px;color:var(--t3)}
+  /* 传送带上的半成品 */
+  .conveyor{margin-top:14px;height:34px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+    background:repeating-linear-gradient(90deg,transparent 0 26px,rgba(29,28,26,.06) 26px 28px);position:relative}
+  .conveyor .p{position:absolute;top:8px;width:18px;height:18px;background:var(--ink)}
+  .conveyor .p.o{background:var(--signal)}
+  .linecap{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10.5px;color:var(--t3);margin-top:8px}
+
+  /* 工位卡：两种结构，不做五连同款 */
+  .bays{display:grid;grid-template-columns:1.45fr 1fr;gap:18px;margin:52px 0 0}
+  .bay{border:1px solid var(--line);background:var(--panel);position:relative;overflow:hidden}
+  .bay .no{position:absolute;top:14px;right:16px;font-family:var(--mono);font-size:11px;color:var(--t3)}
+  .bay .mech{height:150px;border-bottom:1px solid var(--line);position:relative;background:var(--paper)}
+  .bay .txt{padding:18px 20px 22px}
+  .bay h3{font-size:19px;font-weight:700;letter-spacing:-.01em}
+  .bay h3 span{font-family:var(--mono);font-size:12px;font-weight:400;color:var(--t3);margin-left:10px}
+  .bay p{margin-top:8px;font-size:13.5px;color:var(--t2);max-width:38em}
+  .bay .out{margin-top:14px;font-family:var(--mono);font-size:12px;color:var(--signal)}
+  /* 工位1机构：内容流水线（三条轨道+滑块） */
+  .belt{position:absolute;left:24px;right:24px;height:2px;background:var(--steel)}
+  .belt i{position:absolute;top:-5px;width:12px;height:12px;background:var(--ink);border-radius:2px}
+  .belt.b1{top:38px}.belt.b2{top:74px}.belt.b3{top:110px}
+  .belt.b1 i{left:12%}.belt.b2 i{left:44%;background:var(--signal)}.belt.b3 i{left:70%}
+  /* 工位2机构：漏斗 */
+  .funnel{position:absolute;inset:0;display:grid;place-items:center}
+  .funnel svg{width:200px;height:120px}
+
+  /* 成品列表行（代替卡片墙） */
+  .goods{margin:64px 0 0;border-top:1px solid var(--ink)}
+  .goods .h{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--t3);padding:10px 2px}
+  .grow{display:grid;grid-template-columns:64px 220px 1fr 96px;gap:20px;align-items:center;
+    padding:18px 2px;border-bottom:1px solid var(--line)}
+  .grow .id{font-family:var(--mono);font-size:12px;color:var(--t3)}
+  .grow .nm{font-size:16.5px;font-weight:700}
+  .grow .nm em{display:block;font-style:normal;font-family:var(--mono);font-size:11px;font-weight:400;color:var(--t3);margin-top:2px}
+  .grow .de{font-size:13.5px;color:var(--t2)}
+  .grow .go{font-family:var(--mono);font-size:12.5px;color:var(--ink);justify-self:end;white-space:nowrap}
+  .grow:hover{background:var(--panel)}
+  .grow .state{font-family:var(--mono);font-size:11px;color:var(--signal)}
+
+  footer{margin-top:72px;border-top:2px solid var(--ink);padding:20px 0 40px}
+  .foot{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11.5px;color:var(--t2)}
+  .foot b{color:var(--signal);font-weight:500}
+</style>
+</head>
+<body>
+<header><div class="wrap bar">
+  <div class="logo">one-person-<b>workshop</b>®</div>
+  <div class="status"><span class="lamp"></span>产线运行中 · 5 个工位</div>
+</div></header>
+
+<main class="wrap">
+  <section class="hero">
+    <div class="kick">EST. 2026 · SOLO OPERATION</div>
+    <h1>一个人，做出一整个<br><em>产品矩阵</em>。</h1>
+    <p>把重复的事交给机器，把判断留给自己。这里不是作品墙——这是一间车间，五个工位，每条线都在跑。</p>
+
+    <div class="line">
+      <div class="rail"></div>
+      <div class="stations">
+        <div class="st on"><div class="box">01</div><div class="pkg"></div><small>media-hub</small></div>
+        <div class="st"><div class="box">02</div><div class="pkg"></div><small>product-hub</small></div>
+        <div class="st on"><div class="box">03</div><div class="pkg"></div><small>career-hub</small></div>
+        <div class="st"><div class="box">04</div><div class="pkg"></div><small>build-hub</small></div>
+        <div class="st on"><div class="box">05</div><div class="pkg" style="background:var(--ink)"></div><small>uni-workbench</small></div>
+      </div>
+      <div class="conveyor">
+        <i class="p" style="left:6%"></i><i class="p o" style="left:19%"></i>
+        <i class="p" style="left:37%"></i><i class="p o" style="left:58%"></i>
+        <i class="p" style="left:74%"></i><i class="p" style="left:91%"></i>
+      </div>
+      <div class="linecap"><span>RAW · 选题/需求/简历</span><span>IN PROGRESS</span><span>OUTPUT → GitHub</span></div>
+    </div>
+  </section>
+
+  <section class="bays">
+    <div class="bay">
+      <div class="no">STATION 01 · RUNNING</div>
+      <div class="mech">
+        <div class="belt b1"><i></i></div>
+        <div class="belt b2"><i></i></div>
+        <div class="belt b3"><i></i></div>
+      </div>
+      <div class="txt">
+        <h3>media-hub<span>自媒体工作台</span></h3>
+        <p>选题、文案、排期、复盘收在一处，一个人的内容生产线。三条轨道各跑一个环节，橙色为当前在制。</p>
+        <div class="out">OUTPUT · 4 platforms / week</div>
+      </div>
+    </div>
+    <div class="bay">
+      <div class="no">STATION 03 · IDLE</div>
+      <div class="mech funnel">
+        <svg viewBox="0 0 200 120" fill="none">
+          <path d="M20 14H180l-72 50v40H92V64L20 14z" stroke="#1d1c1a" stroke-width="2" stroke-linejoin="round"/>
+          <circle cx="60" cy="26" r="3" fill="#d4551f"/><circle cx="98" cy="26" r="3" fill="#1d1c1a"/>
+          <circle cx="140" cy="26" r="3" fill="#1d1c1a"/><circle cx="92" cy="52" r="3" fill="#1d1c1a"/>
+          <circle cx="100" cy="92" r="4" fill="#d4551f"/>
+        </svg>
+      </div>
+      <div class="txt">
+        <h3>career-hub<span>求职工作台</span></h3>
+        <p>简历、面试、投递与作品集原件统一管理，投递漏斗即工位本体。</p>
+        <div class="out">OUTPUT · offer</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="goods">
+    <div class="h"><span>成品下线记录</span><span>OFFLINE LOG</span></div>
+    <div class="grow"><div class="id">02</div><div class="nm">product-hub<em>产品工作台</em></div><div class="de">从需求池到迭代记录，把每一次产品决策留成可追溯的轨迹。</div><div class="go">查看源码 →</div></div>
+    <div class="grow"><div class="id">04</div><div class="nm">build-hub<em>工程底座</em></div><div class="de">构建、资产与工程化能力的公共底座，支撑上面所有工位。</div><div class="go">查看源码 →</div></div>
+    <div class="grow"><div class="id">05</div><div class="nm">uni-workbench<em>通用工作台</em></div><div class="de">通用工作台 + 知识库，车间总控台。</div><div class="go">查看源码 →</div></div>
+  </section>
+</main>
+
+<footer><div class="wrap foot">
+  <span>© 2026 one-person-lab · Made by one person.</span>
+  <span><b>●</b> LINE STATUS: RUNNING — 5 stations · 3 shipping</span>
+</div></footer>
+</body>
+</html>

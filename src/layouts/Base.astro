@@ -1,45 +1,177 @@
 ---
-import '../styles/global.css'
-import { profile } from '../data/site.mjs'
-
-const {
-  title = `${profile.brand} — 个人项目与产品`,
-  description = profile.lede,
-} = Astro.props
+import { profile, nav } from '../data/site.mjs'
+const { pathname } = Astro.url
 ---
-
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title}</title>
-    <meta name="description" content={description} />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-  </head>
-  <body>
-    <header class="topbar">
-      <div class="wrap topbar-in">
-        <a class="brand" href="/">{profile.brand}<span class="reg">®</span></a>
-        <nav>
-          <a href={profile.github} target="_blank" rel="noopener">GitHub</a>
-          <a href={`mailto:${profile.email}`}>联系</a>
-        </nav>
-      </div>
-    </header>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <title>{Astro.title ?? profile.brand}</title>
+    <script is:inline src="https://cdn.tailwindcss.com?plugins=typography,aspect-ratio"></script>
+    <link is:inline href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style is:inline>
+      body {
+        font-family: 'Space Grotesk', 'PingFang SC', 'Noto Sans SC', sans-serif;
+        background-color: #f0f0f0;
+      }
+      .neo-border { border: 2px solid black; }
+      .neo-shadow { box-shadow: 4px 4px 0px 0px rgba(0,0,0,1); }
+      .neo-shadow-lg { box-shadow: 8px 8px 0px 0px rgba(0,0,0,1); }
+      .neo-hover:hover { transform: translate(2px, 2px); box-shadow: 2px 2px 0px 0px rgba(0,0,0,1); }
+      .neo-hover-lg:hover { transform: translate(4px, 4px); box-shadow: 4px 4px 0px 0px rgba(0,0,0,1); }
+      .prose h1, .prose h2, .prose h3 { font-weight: 900 !important; color: black !important; }
+      .prose blockquote { border-left-width: 4px !important; border-left-color: black !important; font-style: normal !important; font-weight: 700 !important; }
+      .prose code { background-color: #fef08a !important; padding: 2px 4px !important; border: 1px solid black !important; border-radius: 4px !important; }
+      .prose pre { border: 2px solid black !important; box-shadow: 4px 4px 0px 0px rgba(0,0,0,1) !important; background-color: #1a1a1a !important; }
 
-    <main>
+      /* —— 友情链接跑马灯（参考站同款） —— */
+      .friend-marquee-container { width:100%; background-color:#f5f5f5; background-image:radial-gradient(#d1d1d1 1px,transparent 1px); background-size:20px 20px; border-top:2px solid black; border-bottom:2px solid black; padding:24px 0; overflow:hidden; display:flex; align-items:center; position:relative; }
+      .friend-marquee-track { display:flex; gap:32px; width:max-content; animation:marquee-scroll 40s linear infinite; padding-left:32px; }
+      .friend-marquee-container:hover .friend-marquee-track { animation-play-state:paused; }
+      .friend-card { display:flex; align-items:center; padding:8px 16px; border:2px solid black; box-shadow:3px 3px #000; border-radius:4px; text-decoration:none; background-color:#fff; transition:transform .1s ease, box-shadow .1s ease; flex-shrink:0; min-width:140px; cursor:pointer; user-select:none; }
+      .bg-color-1{background-color:#ffb5e8}.bg-color-2{background-color:#b5deff}.bg-color-3{background-color:#fff5b5}.bg-color-4{background-color:#b5ffce}
+      .friend-card.bg-title{background:transparent;border:none;box-shadow:none;padding:8px 20px;min-width:auto}
+      .friend-title-card:hover{transform:scale(1.1) rotate(-2deg)!important;box-shadow:none!important;background:transparent!important}
+      .friend-card.bg-title .friend-name{color:#000;font-size:1.2rem;font-weight:800;text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:4px}
+      .friend-card:not(.friend-title-card):hover{box-shadow:0 0 #000;transform:translate(3px,3px)}
+      .friend-avatar{width:32px;height:32px;border-radius:50%;border:1px solid black;margin-right:12px;object-fit:cover;background-color:#eee}
+      .friend-name{font-weight:700;color:#000;font-size:.95rem;white-space:nowrap}
+      @keyframes marquee-scroll{0%{transform:translate(0)}100%{transform:translate(-50%)}}
+      @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+      @keyframes pulse-border{0%{border-color:#000}50%{border-color:#555}100%{border-color:#000}}
+      @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+      @keyframes modalSlideIn{from{opacity:0;transform:translateY(24px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+      @media(max-width:768px){
+        .friend-marquee-track{animation-duration:60s}
+        .friend-card{min-width:120px;padding:6px 12px}
+        .friend-avatar{width:28px;height:28px}
+        .friend-name{font-size:.85rem}
+      }
+    </style>
+  </head>
+  <body class="min-h-screen flex flex-col pt-24" style="animation: fadeIn 0.4s ease-out">
+    <!-- 胶囊导航（fixed top-6，同参考站） -->
+    <nav class="fixed top-6 left-0 right-0 z-50 px-4">
+      <div class="max-w-4xl mx-auto bg-white neo-border rounded-full px-8 py-3 flex items-center justify-between shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
+        <div class="hidden md:block w-10"></div>
+        <div class="hidden md:flex items-center gap-8" id="nav-links">
+          {nav.map((item) => {
+            const active = item.path === '/' ? pathname === '/' : pathname.startsWith(item.path)
+            return (
+              <a href={item.path}
+                class:list={['nav-link relative group font-bold py-1 px-4 outline-none', active ? 'text-black' : 'text-gray-600 hover:text-black']}
+                style={`transition: all 0.2s cubic-bezier(0.3, 0, 0, 1.3); transform: ${active ? 'translate(-2px, -2px)' : 'translate(0, 0)'}`}>
+                <span class="block relative px-2 py-1" style={`border: 2px solid ${active ? '#000' : 'transparent'}; box-shadow: ${active ? '4px 4px 0px 0px #000' : 'none'}; transition: all 0.2s cubic-bezier(0.3, 0, 0, 1.3)`}>{item.label}</span>
+              </a>
+            )
+          })}
+        </div>
+        <div class="hidden md:flex items-center">
+          <button id="mail-btn" class="text-black hover:text-blue-600 transition-colors cursor-pointer focus:outline-none" aria-label="联系">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.44a2 2 0 0 1-2.06 0L2 7"/></svg>
+          </button>
+        </div>
+        <button id="menu-btn" class="md:hidden text-black flex items-center justify-center" aria-label="菜单">
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+        </button>
+      </div>
+      <!-- 移动端下拉 -->
+      <div id="mobile-menu" class="md:hidden hidden absolute top-full left-4 right-4 mt-4 neo-border bg-white neo-shadow-lg rounded-2xl overflow-hidden p-8" style="animation: fadeIn 0.2s ease-out">
+        <div class="flex flex-col gap-6 text-center">
+          {nav.map((item) => (
+            <a href={item.path} class:list={['text-2xl font-black py-2', pathname === item.path ? 'text-blue-600 underline' : 'text-black']}>{item.label}</a>
+          ))}
+          <button type="button" class="js-contact mt-6 neo-border bg-black text-white font-black text-lg py-3 rounded-xl cursor-pointer">联系我</button>
+        </div>
+      </div>
+    </nav>
+
+    <main class="flex-grow">
       <slot />
     </main>
 
-    <footer>
-      <div class="wrap foot-in">
-        <span>© {new Date().getFullYear()} {profile.brand}</span>
-        <span>Made by one person.</span>
+    <!-- 黑色大页脚（同参考站结构） -->
+    <footer class="bg-black text-white pt-20 pb-10 px-4">
+      <div class="max-w-6xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+          <div class="col-span-1 md:col-span-2">
+            <h3 class="text-3xl font-bold mb-6">Let's build something<br>extraordinary together.</h3>
+            <p class="text-gray-400 max-w-md">一个人，也是一家公司。一定会成为一个很棒的产品！</p>
+          </div>
+          <div>
+            <h4 class="text-xl font-bold mb-6 underline decoration-pink-500 underline-offset-8">Explore</h4>
+            <ul class="flex flex-col gap-4 text-gray-400">
+              <li><a href="/" class="hover:text-white transition-colors">Home</a></li>
+              <li><a href="/about" class="hover:text-white transition-colors">About</a></li>
+              <li><a href="/products" class="hover:text-white transition-colors">Products</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-xl font-bold mb-6 underline decoration-blue-500 underline-offset-8">Connect</h4>
+            <div class="flex gap-4">
+              <a href={profile.github} target="_blank" rel="noopener" class="w-10 h-10 neo-border bg-white text-black rounded-lg flex items-center justify-center hover:bg-blue-400 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+              </a>
+              <button type="button" class="js-contact w-10 h-10 neo-border bg-white text-black rounded-lg flex items-center justify-center hover:bg-[#fb7299] hover:text-white transition-colors cursor-pointer" aria-label="微信">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.44a2 2 0 0 1-2.06 0L2 7"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="border-t border-gray-800 pt-10 flex flex-col md:flex-row justify-between items-center text-gray-500 text-sm gap-4">
+          <p>© 2026 {profile.brand}. Made by one person.</p>
+          <div class="flex gap-8">
+            <a href={profile.github} class="hover:text-white">GitHub</a>
+            <button type="button" class="js-contact hover:text-white cursor-pointer">微信</button>
+          </div>
+        </div>
       </div>
     </footer>
+
+    <!-- 联系弹窗（同参考站 modal 规格） -->
+    <div id="contact-modal" class="hidden fixed inset-0 z-[60] flex items-center justify-center p-4">
+      <div class="absolute inset-0 bg-black/20 backdrop-blur-sm" style="animation: fadeIn 0.2s ease-out"></div>
+      <div class="relative bg-white neo-border rounded-[2.5rem] p-8 md:p-12 max-w-md w-full neo-shadow-lg" style="animation: modalSlideIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)">
+        <button id="modal-close" class="absolute top-6 right-6 text-gray-500 hover:text-black" aria-label="关闭">
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
+        <h3 class="text-3xl font-black mb-3">找<span class="bg-[#f472b6] px-3 neo-border inline-block transform -rotate-2">主理人</span>聊聊</h3>
+        <p class="text-gray-600 font-medium mb-6">产品合作、模板定制、或者只是打个招呼。</p>
+        <div class="flex flex-col items-center gap-4">
+          <img src="/wechat-qr.jpg" alt="微信二维码" class="w-56 h-56 object-contain neo-border rounded-2xl bg-white p-2 neo-shadow" />
+          <p class="font-black text-gray-700">扫描二维码，添加我为朋友。</p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // 移动端菜单
+      const menuBtn = document.getElementById('menu-btn')
+      const mobileMenu = document.getElementById('mobile-menu')
+      menuBtn?.addEventListener('click', () => mobileMenu?.classList.toggle('hidden'))
+      // 联系弹窗（导航邮箱按钮 + 页脚/菜单的 js-contact 按钮都打开它）
+      const modal = document.getElementById('contact-modal')
+      const openModal = () => modal?.classList.remove('hidden')
+      document.getElementById('mail-btn')?.addEventListener('click', openModal)
+      document.querySelectorAll('.js-contact').forEach((b) => b.addEventListener('click', () => { mobileMenu?.classList.add('hidden'); openModal() }))
+      document.getElementById('modal-close')?.addEventListener('click', () => modal?.classList.add('hidden'))
+      modal?.addEventListener('click', (e) => { if (e.target === modal || e.target.classList.contains('backdrop-blur-sm')) modal.classList.add('hidden') })
+      // 导航悬停微交互（同参考站：上浮 2px + 描边出现 + 按下缩放）
+      document.querySelectorAll('#nav-links .nav-link').forEach((a) => {
+        const span = a.querySelector('span')!
+        const active = a.classList.contains('text-black')
+        a.addEventListener('mouseenter', () => { if (active) return; (a as HTMLElement).style.transform = 'translateY(-2px)'; span.style.boxShadow = '2px 2px 0px 0px rgba(0,0,0,0.1)' })
+        a.addEventListener('mouseleave', () => { if (active) return; (a as HTMLElement).style.transform = 'translate(0, 0)'; span.style.boxShadow = 'none' })
+        a.addEventListener('mousedown', () => { (a as HTMLElement).style.transform = 'scale(0.95)' })
+        a.addEventListener('mouseup', () => { (a as HTMLElement).style.transform = active ? 'translate(-2px, -2px)' : 'translateY(-2px)' })
+        a.addEventListener('focus', () => a.blur())
+        span.addEventListener('mouseenter', () => { if (!active) span.style.border = '2px solid #000' })
+        span.addEventListener('mouseleave', () => { if (!active) span.style.border = '2px solid transparent' })
+      })
+    </script>
   </body>
 </html>
